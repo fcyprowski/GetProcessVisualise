@@ -1,4 +1,4 @@
 library(testthat)
-library(processAndVisualise)
+library(getProcessVisualise)
 
-test_check("processAndVisualise")
+test_check("getProcessVisualise")
