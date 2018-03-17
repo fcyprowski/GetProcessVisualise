@@ -26,8 +26,6 @@ PAV_testVisualise = function(dane) {
 
 
 # functions for fast testing ----------------------------------------------
-PAV_pipelineMunging = partial(
-  PAV_pipeline(fVisualise = function(d) return(d))
-)
+
 
 
