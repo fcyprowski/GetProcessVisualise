@@ -1,7 +1,11 @@
-require(testthat)
-require(dplyr)
-require(magrittr)
-require(purrr)
+#' @importFrom purrr when
+#' @importFrom dplyr intersect
+#' @importFrom magrittr equals
+#' @importFrom magrittr is_greater_than
+#' @importFrom dplyr setdiff
+#' @importFrom purrr partial
+#' @importFrom purrr map2
+#' @importFrom magrittr %>%
 
 raiseErrorIfFalse = function(lgl, message, message.function = paste, data) {
   lgl %>%

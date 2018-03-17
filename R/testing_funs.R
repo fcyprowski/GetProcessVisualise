@@ -1,3 +1,10 @@
+#' @importFrom dplyr group_by
+#' @importFrom dplyr mutate
+#' @importFrom dplyr summarise_if
+#' @importFrom dplyr summarise
+#' @importFrom dplyr filter
+#' @importFrom dplyr ungroup
+
 PAV_testData = function() {
   iris
 }
