@@ -11,9 +11,9 @@ test_that('expecting data frame works fine', {
 
 test_that('raiseErrorIfFalse is ok', {
   expect_error(FALSE %>%
-    raiseErrorIfFalse(message = 'Wrong'), 'Wrong')
+                 raiseErrorOrPassForward(iris, "Wrong"), 'Wrong')
   expect_identical(TRUE %>%
-                raiseErrorIfFalse(data = iris), iris)
+                     raiseErrorOrPassForward(iris), iris)
 })
 
 test_that('testIfThereAreNAs works fine', {
