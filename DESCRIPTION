@@ -1,16 +1,14 @@
 Package: getProcessVisualise
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Cohesive and testable BI pipelines in functional programming paradigm
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: person("Filip", "Cyprowski", email = "f.cyprowski@gmail.com", role = c("aut", "cre"))
+Description: Package for creating easy testable, cohesive and loosely coupled (yeah, all of them) BI pipelines. Should be especially handy when creating Shiny backends or tools (packages, apps) for people not so fluent in R.
+License: GPL-2
 Encoding: UTF-8
 LazyData: true
 Suggests: testthat
-Imports: purrr,
-    dplyr,
-    magrittr
+Imports: purrr (>= 0.2.4),
+    dplyr (>= 0.7.0),
+    magrittr (>= 1.5)
 RoxygenNote: 6.0.1
