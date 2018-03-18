@@ -5,44 +5,64 @@
 #' @importFrom dplyr setdiff
 #' @importFrom purrr partial
 #' @importFrom purrr map2
+#' @importFrom purrr map
 #' @importFrom magrittr %>%
+#' @importFrom purrr discard
 
-raiseErrorIfFalse = function(lgl, message, message.function = paste, data) {
+raiseErrorOrPassForward = function(lgl, data, ...) {
   lgl %>%
-    purrr::when(. ~ data,
-       ~stop(message %>%
-               message.function))
-}
-
-raiseErrorOrPassForward = function(lgl, message.function, data) {
-  lgl %>%
-    purrr::when(. ~ data,
-                ~stop(message.function()))
+    when(. ~ data, ~stop(paste(...)))
 
 }
-
+#' Test column naming
+#'
+#' @param data data.frame you want to test
+#' @param expected.columns character vector of expected column names
+#'
+#' @return same data.frame or raise error
+#' @export testIfNamesAreThere
+#'
+#' @examples
 testIfNamesAreThere = function(data, expected.columns) {
   names(data) %>%
     intersect(expected.columns) %>%
     length() %>%
-    magrittr::equals(length(expected.columns)) %>%
-    raiseErrorIfFalse(
-      "These columns are not in the data.frame:",
-      purrr::partial(paste, setdiff(expected.columns, names(data)), .first = F)
-    )
+    equals(length(expected.columns)) %>%
+    raiseErrorIfNamesAreNotThere(data, expected.columns)
+}
+raiseErrorIfNamesAreNotThere = function(lgl, data, expected.columns) {
+  raiseErrorOrPassForward(lgl, data,
+                          "These columns are not in the data.frame:", 
+                          setdiff(expected.columns, names(data)))
 }
 
+#' Title
+#'
+#' @param data 
+#'
+#' @return
+#' @export
+#'
+#' @examples
 testIfThereAreNAs = function(data) {
   data %>%
     nrow() %>%
-    magrittr::equals(data %>%
+    equals(data %>%
              na.omit() %>%
              nrow()) %>%
-    raiseErrorIfFalse(
-      "NA's in data!",
-      data = data
+    raiseErrorOrPassForward(
+      data,
+      "NA's in data!"
     )
 }
+#' Test if you have NA's in the data.frame
+#'
+#' @param data data.frame
+#'
+#' @return the same data.frame or raise error
+#' @export
+#'
+#' @examples
 testWhereAreNAs = function(data) {
   data %>%
     map(~which(is.na(.))) %>%
@@ -58,15 +78,28 @@ testWhereAreNAs = function(data) {
       data = data
     )
 }
-
-is_longer_than = function(e1, e2) {
-  length(e1) %>% is_greater_than(e2)
-}
-
+#' Test if types of columns are ok
+#'
+#' @param data data.frame you want to check
+#' @param lTypes list of logical condition for every column, e.g.
+#' c(is.numeric, is.numeric)
+#'
+#' @return the same data or raise error
+#' @export testIfTypesAreCorrect
+#'
+#' @examples
 testIfTypesAreCorrect = function(data, lTypes) {
-  # lTypes - list of functions like "is.numeric" etc.
+  stopifnot(length(data) == length(lTypes))
   data %>%
-    purrr::map2(lTypes, ~.y(.x)) %>%
-    map(~raiseErrorIfFalse(., message = 'Data type not as expected'))
-
+    expectDataFrame() %>%
+    map2(lTypes, ~.y(.x)) %>%
+    discard(is_true) -> wrong.types
+  wrong.types %>%
+    when(length(.) > 0 ~FALSE, TRUE) %>%
+    raiseErrorOrPassForward(
+      data, 
+      names(wrong.types) %>%
+        map(~paste("Column", ., "have wrong data type")) %>%
+        paste(collapse = ', ')
+    )
 }
