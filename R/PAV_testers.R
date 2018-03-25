@@ -55,29 +55,6 @@ testIfThereAreNAs = function(data) {
       "NA's in data!"
     )
 }
-#' Test if you have NA's in the data.frame
-#'
-#' @param data data.frame
-#'
-#' @return the same data.frame or raise error
-#' @export
-#'
-#' @examples
-testWhereAreNAs = function(data) {
-  data %>%
-    map(~which(is.na(.))) %>%
-    keep(is_longer_than, 0) -> result
-
-  result %>%
-    when(length(.) == 0 ~TRUE, ~FALSE) %>%
-    raiseErrorOrPassForward(
-      message.function = partial(
-        map2, result, names(result),
-        ~paste('Column:', .y, 'NAs found on indexes:', toString(.x))
-      ),
-      data = data
-    )
-}
 #' Test if types of columns are ok
 #'
 #' @param data data.frame you want to check
