@@ -1,4 +1,5 @@
 #' @importFrom purrr detect_index
+#' @importFrom dplyr filter_
 
 #' @title Test data.frame based on some conditions
 #'
