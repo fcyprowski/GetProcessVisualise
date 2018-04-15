@@ -20,3 +20,6 @@ is_pseudodate = function(x) {
   stringr::str_extract(x, "[0-9]{4}-[0-9]{2}-[0-9]{2}") %>%
     equals(x)
 }
+testowa_funkcja = function() {
+  print('test')
+}
